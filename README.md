@@ -122,7 +122,7 @@ See test_try.go
 
 
 ##Different cases of try/catch/finally
-This Go package the same behaviour than the implementation of exceptions in Java/C++ and Pythin.
+This Go package the same behaviour than the implementation of exceptions in Java/C++ and Python.
 
 
 ###1. No crash at all
