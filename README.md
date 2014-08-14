@@ -14,6 +14,30 @@ $ go get github.com/manucorpoart/try
 
 ###API examples:
 ####1. Simple panic inside try
+Unfortunately we have to include Finally before Catch. I tried to find a way to avoid this, but it looks impossible. Anyway the behaviour and calling order is exactly the same than java or python.
+
+```go
+import (
+	"fmt"
+	"github.com/manucorporat/try"
+)
+
+func main() {
+	try.This(func() {
+		panic("my panic")
+
+	}).Finally(func() {
+		fmt.Println("this must be printed after the catch")
+
+	}).Catch(func(e try.E) {
+		// Print crash
+		fmt.Println(e)
+	})
+}
+```
+
+####2. Finally is optional
+
 ```go
 import (
 	"fmt"
@@ -35,28 +59,6 @@ func main() {
 }
 ```
 
-####2. Add Finally
-Unfortunately we have to include Finally before Catch. I tried to find a way to avoid this, but it's impossible. Anyway the behaviour and calling order are exactly the same than java or python.
-
-```go
-import (
-	"fmt"
-	"github.com/manucorporat/try"
-)
-
-func main() {
-	try.This(func() {
-		panic("my panic")
-
-	}).Finally(func() {
-		fmt.Println("this must be printed after the catch")
-
-	}).Catch(func(e try.E) {
-		// Print crash
-		fmt.Println(e)
-	})
-}
-```
 
 ####3. Rethrowing
 
