@@ -3,7 +3,7 @@ Experiment in Golang that tries to bring the exception behaviour of java/python/
 
 ##Install
 ```bash
-$ go get github.com/manucorpoart/try
+$ go get github.com/manucorporat/try
 ```
 
 ##Approach
