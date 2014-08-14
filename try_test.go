@@ -185,7 +185,6 @@ func Test_CrashInThrow2(T *testing.T) {
 			T.Error("error is not 'testing panic'")
 		}
 		try.Throw()
-
 	})
 }
 

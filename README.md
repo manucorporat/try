@@ -1,8 +1,126 @@
 #Try/catch/finally in Go
-This is an experiment in Golang, that tries to bring the exception behaviour of java/python/c++ to Golang.
+Experiment in Golang that tries to bring the exception behaviour of java/python/c++ to Golang using the same syntax.
+
+##Install
+```bash
+$ go get github.com/manucorpoart/try
+```
+
+##Approach
+
+1. We need a Try, Catch and Finally methods
+2. We need a Throw() method for rethrowing exceptions
+3. It needs to be state-less so it can be nested and used across many threads.
+
+###API examples:
+####1. Simple panic inside try
+```go
+import (
+	"fmt"
+	"github.com/manucorporat/try"
+)
+
+func main() {
+	var obj interface{}
+	obj = 2
+	try.This(func() {
+		// this operation will panic because obj is an integer
+		text := obj.(string)
+		fmt.Println(text)
+
+	}).Catch(func(e try.E) {
+		// Print crash
+		fmt.Println(e)
+	})
+}
+```
+
+####2. Add Finally
+Unfortunately we have to include Finally before Catch. I tried to find a way to avoid this, but it's impossible. Anyway the behaviour and calling order are exactly the same than java or python.
+
+```go
+import (
+	"fmt"
+	"github.com/manucorporat/try"
+)
+
+func main() {
+	try.This(func() {
+		panic("my panic")
+
+	}).Finally(func() {
+		fmt.Println("this must be printed after the catch")
+
+	}).Catch(func(e try.E) {
+		// Print crash
+		fmt.Println(e)
+	})
+}
+```
+
+####3. Rethrowing
+
+```go
+import (
+	"fmt"
+	"github.com/manucorporat/try"
+)
+
+func main() {
+	try.This(func() {
+		panic("my panic")
+
+	}).Finally(func() {
+		fmt.Println("this must be printed after the catch")
+
+	}).Catch(func(_ try.E) {
+		fmt.Println("exception catched") // print
+		try.Throw()                      // rethrow current exception!!
+	})
+}
+```
+
+####4. Nested
+
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/manucorporat/try"
+)
+
+func main() {
+	try.This(func() {
+		try.This(func() {
+			panic("my panic")
+
+		}).Catch(func(e try.E) {
+			fmt.Println("fixing stuff") // print
+			try.Throw()                 // rethrow current exception!!
+		})
+
+	}).Catch(func(e try.E) {
+		// print
+		fmt.Println(e)
+	})
+	fmt.Println("hey")
+}
+```
+prints
+```
+fixing stuff
+my panic
+hey
+```
+
+### Full covered with unit tests
+See test_try.go
+
+
 
 ##Different cases of try/catch/finally
-Pseudocode
+This Go package the same behaviour than the implementation of exceptions in Java/C++ and Pythin.
 
 
 ###1. No crash at all
@@ -94,7 +212,7 @@ prints
 ```
 yes! "exception 2" was throwed but "overwritten" by "exception 3"
 
-###5. Finally is always optional
+###5. Finally is optional
 
 ```java
 try {
@@ -131,117 +249,3 @@ prints
 2
 ---> uncatched exception 1
 ```
-
-##Porting all this to Go
-
-1. We need a Try, Catch and Finally method
-2. We need a Throw() method for rethrowing
-3. It needs to be state-less
-
-###Examples:
-####1. Simple panic inside try
-```go
-import (
-	"fmt"
-	"github.com/manucorporat/try"
-)
-
-func main() {
-	var obj interface{}
-	obj = 2
-	try.This(func() {
-		// this operation will panic because obj is an integer
-		text := obj.(string)
-		fmt.Println(text)
-
-	}).Catch(func(e try.E) {
-		// Print crash
-		fmt.Println(e)
-	})
-}
-```
-
-####2. Add Finally
-Unfortunaly we have to include Finally before Catch.  Though the behaviour is exactly the same than java.
-
-```go
-import (
-	"fmt"
-	"github.com/manucorporat/try"
-)
-
-func main() {
-	try.This(func() {
-		panic("my panic")
-
-	}).Finally(func() {
-		fmt.Println("this must be printed after the catch")
-
-	}).Catch(func(e try.E) {
-		// Print crash
-		fmt.Println(e)
-	})
-}
-```
-
-####3. Rethrowing
-Unfortunaly we have to include Finally before Catch.  Though the behaviour is exactly the same than java.
-
-```go
-import (
-	"fmt"
-	"github.com/manucorporat/try"
-)
-
-func main() {
-	try.This(func() {
-		panic("my panic")
-
-	}).Finally(func() {
-		fmt.Println("this must be printed after the catch")
-
-	}).Catch(func(e try.E) {
-		fmt.Println("exception catched") // print
-		try.Throw()                      // rethrow current exception!!
-	})
-}
-```
-
-####4. Nested
-
-```go
-package main
-
-import (
-	"fmt"
-	"github.com/manucorporat/try"
-)
-
-func main() {
-	try.This(func() {
-		try.This(func() {
-			panic("my panic")
-
-		}).Catch(func(e try.E) {
-			fmt.Println("fixing stuff") // print
-			try.Throw()                 // rethrow current exception!!
-		})
-
-	}).Catch(func(e try.E) {
-		// print
-		fmt.Println(e)
-	})
-	fmt.Println("hey")
-}
-```
-prints
-```
-fixing stuff
-my panic
-hey
-```
-
-### Full covered with unit tests
-See test_try.go
-
-
