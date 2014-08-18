@@ -1,5 +1,6 @@
-#Try/catch/finally in Go
-Experiment in Golang that tries to bring the exception behaviour of java/python/c++ to Golang using the same syntax.
+[![GoDoc](https://godoc.org/github.com/manucorporat/try?status.png)](https://godoc.org/github.com/manucorporat/try)  
+#Try/Catch/Finally in Go
+Experiment in Golang that tries to bring the exception behaviour of Java/Python/C++ to Golang using the same syntax.  
 
 ## Experiment only!!
 I as a Go developer, do not recomend to use this library in production or real world code.
@@ -12,13 +13,15 @@ It also shows that Go, even without explicit exceptions has the semantics needed
 
 ##Approach
 
-1. We need a Try, Catch and Finally methods
-2. We need a Throw() method for rethrowing exceptions
-3. It needs to be state-less so it can be nested and used across many threads.
+1. We need `Try`, `Catch` and `Finally` methods.
+2. We need a `Throw()` method for rethrowing exceptions.
+3. It needs to be stateless so it could be nested and used across many threads.  
 
-###API examples:
-####1. Simple panic inside try
-Unfortunately we have to include Finally before Catch. I tried to find a way to avoid this, but it looks impossible. Anyway the behaviour and calling order is exactly the same than java or python.
+###API examples:  
+
+####1. Simple `panic()` inside `Try`  
+
+Unfortunately we have to include a `Finally` before a `Catch`. I have tried to find a way to avoid it, but looks impossible. Anyway, the behaviour and order of call is exactly the same than Java or Python.  
 
 ```go
 import (
@@ -38,9 +41,9 @@ func main() {
 		fmt.Println(e)
 	})
 }
-```
+```  
 
-####2. Finally is optional
+####2. `Finally` is optional  
 
 ```go
 import (
@@ -61,10 +64,9 @@ func main() {
 		fmt.Println(e)
 	})
 }
-```
+```  
 
-
-####3. Rethrowing
+####3. Rethrowing  
 
 ```go
 import (
@@ -84,9 +86,9 @@ func main() {
 		try.Throw()                      // rethrow current exception!!
 	})
 }
-```
+```  
 
-####4. Nested
+####4. Nested  
 
 ```go
 package main
@@ -112,24 +114,23 @@ func main() {
 	})
 	fmt.Println("hey")
 }
-```
-prints
+```  
+prints  
 ```
 fixing stuff
 my panic
 hey
-```
+```  
 
-### Full covered with unit tests
-See test_try.go
-
-
-
-##Different cases of try/catch/finally
-This Go package the same behaviour than the implementation of exceptions in Java/C++ and Pythin.
+### Full covered with unit tests  
+* See [test_try.go](https://github.com/manucorporat/try/blob/master/try.go)  
 
 
-###1. No crash at all
+##Different cases of try/catch/finally  
+
+This Go package has the same behaviour than the implementation of exceptions in Java, C++ and Python.  
+
+###1. No crash at all  
 
 ```java
 try {
@@ -141,15 +142,15 @@ try {
 	print "3"
 }
 print "4"
-```
-prints
+```  
+prints  
 ```
 1
 3
 4
-```
+```  
 
-###2. Throw in try
+###2. Throw in `try`  
 
 ```java
 try {
@@ -162,17 +163,17 @@ try {
 	print "3"
 }
 print "4"
-```
-prints
+```  
+prints  
 ```
 1
 2
 exception 1
 3
 4
-```
+```  
 
-###3. Throw in try & catch
+###3. Throw in `try` and `catch`  
 
 ```java
 try {
@@ -185,16 +186,16 @@ try {
 	print "3"
 }
 print "4"
-```
-prints
+```  
+prints  
 ```
 1
 2
 3
 ---> uncatched exception 2
-```
+```  
 
-###4. Throw in try & catch & finally
+###4. Throw in `try`, `catch` and `finally`  
 
 ```java
 try {
@@ -208,17 +209,17 @@ try {
 	throw "exception 3"
 }
 print "4"
-```
-prints
+```  
+prints  
 ```
 1
 2
 3
 ---> uncatched exception 3
-```
-yes! "exception 2" was throwed but "overwritten" by "exception 3"
+```  
+yes! "exception 2" was throwed but "overwritten" by "exception 3"  
 
-###5. Finally is optional
+###5. `finally` is optional  
 
 ```java
 try {
@@ -229,15 +230,15 @@ try {
 	throw "exception 2"
 }
 print "4"
-```
-prints
+```  
+prints  
 ```
 1
 2
 ---> uncatched exception 2
-```
+```  
 
-###5. Rethrowing exceptions
+###5. Rethrowing exceptions  
 
 ```java
 try {
@@ -248,8 +249,8 @@ try {
 	throw
 }
 print "4"
-```
-prints
+```  
+prints  
 ```
 1
 2
