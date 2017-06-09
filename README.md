@@ -1,5 +1,5 @@
 [![GoDoc](https://godoc.org/github.com/manucorporat/try?status.png)](https://godoc.org/github.com/manucorporat/try)  
-#Try/Catch/Finally in Go
+# Try/Catch/Finally in Go
 Experiment in Golang that tries to bring the exception behaviour of Java/Python/C++ to Golang using the same syntax.  
 
 ## Experiment only!!
@@ -11,15 +11,15 @@ Instead you should use this project as a learning tool to understand the excepti
 It also shows that Go, even without explicit exceptions has the semantics needed to provide it exactly in the same way Java/C++ and Python does.
 
 
-##Approach
+## Approach
 
 1. We need `Try`, `Catch` and `Finally` methods.
 2. We need a `Throw()` method for rethrowing exceptions.
 3. It needs to be stateless so it could be nested and used across many threads.  
 
-###API examples:  
+### API examples:  
 
-####1. Simple `panic()` inside `Try`  
+#### 1. Simple `panic()` inside `Try`  
 
 Unfortunately we have to include a `Finally` before a `Catch`. I have tried to find a way to avoid it, but looks impossible. Anyway, the behaviour and order of call is exactly the same than Java or Python.  
 
@@ -43,7 +43,7 @@ func main() {
 }
 ```  
 
-####2. `Finally` is optional  
+#### 2. `Finally` is optional  
 
 ```go
 import (
@@ -66,7 +66,7 @@ func main() {
 }
 ```  
 
-####3. Rethrowing  
+#### 3. Rethrowing  
 
 ```go
 import (
@@ -88,7 +88,7 @@ func main() {
 }
 ```  
 
-####4. Nested  
+#### 4. Nested  
 
 ```go
 package main
@@ -126,11 +126,11 @@ hey
 * See [test_try.go](https://github.com/manucorporat/try/blob/master/try.go)  
 
 
-##Different cases of try/catch/finally  
+## Different cases of try/catch/finally  
 
 This Go package has the same behaviour than the implementation of exceptions in Java, C++ and Python.  
 
-###1. No crash at all  
+### 1. No crash at all  
 
 ```java
 try {
@@ -150,7 +150,7 @@ prints
 4
 ```  
 
-###2. Throw in `try`  
+### 2. Throw in `try`  
 
 ```java
 try {
@@ -173,7 +173,7 @@ exception 1
 4
 ```  
 
-###3. Throw in `try` and `catch`  
+### 3. Throw in `try` and `catch`  
 
 ```java
 try {
@@ -195,7 +195,7 @@ prints
 ---> uncatched exception 2
 ```  
 
-###4. Throw in `try`, `catch` and `finally`  
+### 4. Throw in `try`, `catch` and `finally`  
 
 ```java
 try {
@@ -219,7 +219,7 @@ prints
 ```  
 yes! "exception 2" was throwed but "overwritten" by "exception 3"  
 
-###5. `finally` is optional  
+### 5. `finally` is optional  
 
 ```java
 try {
@@ -238,7 +238,7 @@ prints
 ---> uncatched exception 2
 ```  
 
-###5. Rethrowing exceptions  
+### 5. Rethrowing exceptions  
 
 ```java
 try {
